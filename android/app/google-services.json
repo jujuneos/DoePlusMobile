@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "659245031200",
+    "firebase_url": "https://doeplus-default-rtdb.firebaseio.com",
+    "project_id": "doeplus",
+    "storage_bucket": "doeplus.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:659245031200:android:4daae1b81047a0f578c145",
+        "android_client_info": {
+          "package_name": "com.example.doeplus"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "659245031200-6i6phff5gpadv5lidvku8ojp5rpi6p2l.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD0_m0VHskgkHbKprADFC87W4T3G6bc1zg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "659245031200-6i6phff5gpadv5lidvku8ojp5rpi6p2l.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

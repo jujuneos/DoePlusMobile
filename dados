@@ -1,0 +1,30 @@
+import 'package:flutter/material.dart';
+import 'package:doeplus/models/ong.dart';
+
+class OngsRepository extends ChangeNotifier {
+  final List<Ong> _ongs = [
+    Ong(
+        nome:
+            'AVOSOS - Associação dos Voluntários a Serviço da Oncologia em Sergipe',
+        endereco: 'R. Leonel Curvelo, 55 - Suíssa, Aracaju - SE, 49050-480',
+        foto:
+            'https://lh3.googleusercontent.com/JYv-QwuzttG2BRbPbCrhTW9tVGENwkwU8oTNr2fNNVxEf-mLfq-MBqbXVVkNEU3wTZcsmC1rv97Rsk5iaQ=w410-h220-rw',
+        tipo: 'Saúde',
+        latitude: -10.9244242,
+        longitude: -37.0603472),
+    Ong(
+        nome: 'Remonta - Clínica LGBTI+',
+        endereco:
+            'Rua Promotor Arquibaldo Mendonça, 297 - Suíssa, Aracaju - SE, 49050-650',
+        foto:
+            'https://lh3.googleusercontent.com/3n_0XySrETHkKZl-rjz12m8CjLA2aQfoU7nSgddJG18wEbKGL67VlF7SjtfcG_cM6J30T_kdzOOLqDRZfw=w293-h220-rw',
+        tipo: 'LGBT',
+        latitude: -10.9271733,
+        longitude: -37.0649712)
+  ];
+
+  List<Ong> get ongs => _ongs;
+}
+
+
+Avosos@203doe

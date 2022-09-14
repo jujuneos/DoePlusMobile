@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>659245031200-n7gjbg0p89hk8nm74ifgbecbdp9otglj.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.659245031200-n7gjbg0p89hk8nm74ifgbecbdp9otglj</string>
+	<key>API_KEY</key>
+	<string>AIzaSyAfO5gObMLo96jZv_ArVTD0wiIeVBAgrfA</string>
+	<key>GCM_SENDER_ID</key>
+	<string>659245031200</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.example.doeplus</string>
+	<key>PROJECT_ID</key>
+	<string>doeplus</string>
+	<key>STORAGE_BUCKET</key>
+	<string>doeplus.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:659245031200:ios:b3f489dfac1325b478c145</string>
+	<key>DATABASE_URL</key>
+	<string>https://doeplus-default-rtdb.firebaseio.com</string>
+</dict>
+</plist>
