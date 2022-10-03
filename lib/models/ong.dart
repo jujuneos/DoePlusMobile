@@ -1,3 +1,5 @@
+import 'package:image_picker/image_picker.dart';
+
 class Ong {
   String nome;
   String email;
@@ -5,7 +7,6 @@ class Ong {
   String tipo;
   String descricao;
   String endereco;
-  String foto;
   String telefone;
   double latitude;
   double longitude;
@@ -15,13 +16,14 @@ class Ong {
   String? conta;
   String? picPay;
 
+  List<XFile> fotos;
+
   Ong(
       {required this.nome,
       required this.email,
       required this.senha,
       required this.descricao,
       required this.endereco,
-      required this.foto,
       required this.tipo,
       required this.telefone,
       required this.latitude,
@@ -30,5 +32,6 @@ class Ong {
       this.banco,
       this.agencia,
       this.conta,
-      this.picPay});
+      this.picPay,
+      required this.fotos});
 }

@@ -1,8 +1,8 @@
+import 'package:doeplus/models/ongView.dart';
 import 'package:flutter/material.dart';
-import 'package:doeplus/models/ong.dart';
 
 class OngInfo extends StatelessWidget {
-  Ong ong;
+  OngView ong;
   OngInfo({Key? key, required this.ong}) : super(key: key);
 
   @override

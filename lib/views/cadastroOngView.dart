@@ -26,7 +26,7 @@ class _CadastroOngView extends State<CadastroOngView> {
   final controller = Get.put(CadastroOngController());
   String tipoOng = "Escolha o tipo";
   bool mostraSenha = false;
-  String foto = "";
+  List<XFile> fotos = [];
 
   Future<XFile?> getImage() async {
     final ImagePicker picker = ImagePicker();
@@ -34,8 +34,8 @@ class _CadastroOngView extends State<CadastroOngView> {
     return image;
   }
 
-  Future<void> upload(String path) async {
-    foto = path;
+  Future<void> upload(XFile foto) async {
+    fotos.add(foto);
   }
 
   @override
@@ -330,20 +330,6 @@ class _CadastroOngView extends State<CadastroOngView> {
                                               .validate()) {
                                             salvarDados();
                                           }
-                                          showDialog(
-                                              context: context,
-                                              builder: (context) => AlertDialog(
-                                                    title: const Text(
-                                                        "Cadastro efetuado com sucesso!"),
-                                                    actions: <Widget>[
-                                                      TextButton(
-                                                          onPressed: () =>
-                                                              Navigator.pop(
-                                                                  context),
-                                                          child:
-                                                              const Text("Ok"))
-                                                    ],
-                                                  ));
                                           Navigator.pop(context);
                                           Navigator.of(context).push(
                                               MaterialPageRoute(
@@ -372,7 +358,7 @@ class _CadastroOngView extends State<CadastroOngView> {
       var lat = json.results?[0].geometry?.bounds?.northeast?.lat;
       var lng = json.results?[0].geometry?.bounds?.northeast?.lng;
 
-      controller.registrar(lat, lng, foto);
+      controller.registrar(lat, lng, fotos);
     } else {
       throw 'Não foi possível encontrar o endereço informado.';
     }
@@ -464,7 +450,7 @@ class _CadastroOngView extends State<CadastroOngView> {
     XFile? file = await getImage();
     if (file != null) {
       controller.isLoading.value = true;
-      await upload(file.path);
+      await upload(file);
       controller.isLoading.value = false;
       return showDialog(
           context: context,
@@ -493,7 +479,7 @@ class _CadastroOngView extends State<CadastroOngView> {
                 ]);
           });
     } else {
-      foto = "";
+      fotos = [];
     }
   }
 

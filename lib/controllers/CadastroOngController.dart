@@ -2,6 +2,7 @@ import 'package:doeplus/models/ong.dart';
 import 'package:doeplus/services/AutenticacaoService.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 
 class CadastroOngController extends GetxController {
   AutenticacaoService auth = AutenticacaoService();
@@ -23,7 +24,7 @@ class CadastroOngController extends GetxController {
   var isLogin = true.obs;
   var isLoading = false.obs;
 
-  registrar(var lat, var lng, String foto) async {
+  registrar(var lat, var lng, List<XFile> fotos) async {
     isLoading.value = true;
     await auth.cadastrarOng(Ong(
         nome: nome.text,
@@ -35,12 +36,12 @@ class CadastroOngController extends GetxController {
         telefone: telefone.text,
         latitude: lat,
         longitude: lng,
-        foto: foto,
         chavePix: chavePix.text,
         banco: banco.text,
         agencia: agencia.text,
         conta: conta.text,
-        picPay: picPay.text));
+        picPay: picPay.text,
+        fotos: fotos));
     isLoading.value = false;
   }
 

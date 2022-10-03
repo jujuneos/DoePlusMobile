@@ -1,14 +1,12 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:doeplus/models/ong.dart';
 import 'package:doeplus/models/ongView.dart';
 import 'package:doeplus/telas/telaBusca.dart';
 import 'package:doeplus/views/widgets/ongInfo.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
-import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
 
@@ -32,12 +30,12 @@ class OngsController extends GetxController {
 
       for (var dado in dados) {
         ongs.add(OngView(
-            nome: dado['nome'],
+            nome: dado['userName'],
             tipo: dado['tipo'],
             descricao: dado['descricao'],
             endereco: dado['endereco'],
             foto: dado['foto'],
-            telefone: dado['telefone'],
+            telefone: dado['phoneNumber'],
             latitude: dado['latitude'],
             longitude: dado['longitude'],
             chavePix: dado['chavePix'] ?? "",
@@ -92,14 +90,13 @@ class OngsController extends GetxController {
       final dados = jsonDecode(response.body);
 
       for (var dado in dados) {
-        print(dado);
         ongs.add(OngView(
-            nome: dado['nome'],
+            nome: dado['userName'],
             tipo: dado['tipo'],
             descricao: dado['descricao'],
             endereco: dado['endereco'],
             foto: dado['foto'],
-            telefone: dado['telefone'],
+            telefone: dado['phoneNumber'],
             latitude: dado['latitude'],
             longitude: dado['longitude'],
             chavePix: dado['chavePix'] ?? "",
