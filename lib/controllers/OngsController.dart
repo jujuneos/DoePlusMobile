@@ -9,6 +9,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
+import 'package:flutter_overlay_loader/flutter_overlay_loader.dart';
 
 class OngsController extends GetxController {
   double latitude = 0.0;
@@ -17,42 +18,17 @@ class OngsController extends GetxController {
   Set<Marker> markers = <Marker>{};
   late GoogleMapController _mapsController;
   late StreamSubscription<Position> positionStream;
+  List<OngView> ongs = [];
+  var url = "https://doeplusapi.herokuapp.com/api/";
 
   get mapsController => _mapsController;
 
   filtrarOngs(String tipo) async {
-    List<OngView> ongs = [];
-    var url = "https://doeplusapi.herokuapp.com/api/Instituicoes";
+    List<OngView> ongsFiltro = [];
 
-    try {
-      final response = await http.get(Uri.parse(url));
-      final dados = jsonDecode(response.body);
-
-      for (var dado in dados) {
-        ongs.add(OngView(
-            nome: dado['userName'],
-            tipo: dado['tipo'],
-            descricao: dado['descricao'],
-            endereco: dado['endereco'],
-            foto: dado['foto'],
-            telefone: dado['phoneNumber'],
-            latitude: dado['latitude'],
-            longitude: dado['longitude'],
-            chavePix: dado['chavePix'] ?? "",
-            banco: dado['banco'] ?? "",
-            agencia: dado['agencia'] ?? "",
-            conta: dado['conta'] ?? "",
-            picPay: dado['picPay'] ?? ""));
-      }
-    } catch (error) {
-      rethrow;
-    }
-
-    List<dynamic> ongsFiltro = [];
-
-    for (var element in ongs) {
-      if (element.tipo == tipo) {
-        ongsFiltro.add(element);
+    for (var ong in ongs) {
+      if (ong.tipo == tipo) {
+        ongsFiltro.add(ong);
       }
     }
 
@@ -65,8 +41,8 @@ class OngsController extends GetxController {
             position: LatLng(ong.latitude, ong.longitude),
             onTap: () => {
                   showModalBottomSheet(
-                    context: appKey.currentState!.context,
-                    builder: (context) => OngInfo(ong: ong),
+                    context: globalKey.currentState!.context,
+                    builder: (context) => OngInfo(ong: ong).build(context),
                   )
                 }),
       );
@@ -81,30 +57,43 @@ class OngsController extends GetxController {
   }
 
   loadOngs() async {
-    List<dynamic> ongs = [];
-    var url = "https://doeplusapi.herokuapp.com/api/Instituicoes";
+    var urlGeral = url + "Instituicoes";
+    var urlFoto = url + "Fotos/Foto/";
+    var urlFotos = url + "Fotos/Fotos/";
 
     try {
-      final response = await http.get(Uri.parse(url));
+      final response = await http.get(Uri.parse(urlGeral));
 
-      final dados = jsonDecode(response.body);
+      var dados = jsonDecode(response.body);
 
       for (var dado in dados) {
+        final foto = await http.get(Uri.parse(urlFoto + dado['id']));
+        final responseFotos = await http.get(Uri.parse(urlFotos + dado['id']));
+
+        var dadosFoto = jsonDecode(foto.body);
+        var fotos = jsonDecode(responseFotos.body);
+
         ongs.add(OngView(
+            id: dado['id'],
             nome: dado['userName'],
             tipo: dado['tipo'],
             descricao: dado['descricao'],
+            foto: dadosFoto['bytes'],
+            fotos: fotos,
             endereco: dado['endereco'],
-            foto: dado['foto'],
             telefone: dado['phoneNumber'],
             latitude: dado['latitude'],
             longitude: dado['longitude'],
+            site: dado['site'] ?? "",
+            avaliacao: double.parse(dado['avaliacao'].toString()),
             chavePix: dado['chavePix'] ?? "",
             banco: dado['banco'] ?? "",
             agencia: dado['agencia'] ?? "",
             conta: dado['conta'] ?? "",
             picPay: dado['picPay'] ?? ""));
       }
+
+      Loader.hide();
     } catch (error) {
       rethrow;
     }
@@ -118,8 +107,8 @@ class OngsController extends GetxController {
             position: LatLng(ong.latitude, ong.longitude),
             onTap: () => {
                   showModalBottomSheet(
-                    context: appKey.currentState!.context,
-                    builder: (context) => OngInfo(ong: ong),
+                    context: globalKey.currentState!.context,
+                    builder: (context) => OngInfo(ong: ong).build(context),
                   )
                 }),
       );

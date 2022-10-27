@@ -7,15 +7,18 @@ class LoginController extends GetxController {
 
   final email = TextEditingController();
   final senha = TextEditingController();
-  final formKey = GlobalKey<FormState>();
+  final loginKey = GlobalKey<FormState>();
 
   var botaoPrincipal = 'Entrar'.obs;
   var isLogin = true.obs;
   var isLoading = false.obs;
 
   login() async {
-    isLoading.value = true;
     await auth.fazerLogin(email.text, senha.text);
-    isLoading.value = false;
+  }
+
+  limparDados() {
+    email.text = "";
+    senha.text = "";
   }
 }

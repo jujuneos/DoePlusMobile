@@ -1,5 +1,6 @@
 // ignore: file_names
 import 'package:doeplus/styles/tema/defaultTheme.dart';
+import 'package:doeplus/telas/telaBusca.dart';
 import 'package:flutter/material.dart';
 import 'package:doeplus/views/escolhaCadastroView.dart';
 
@@ -23,6 +24,7 @@ class _CadastroBotaoState extends State<CadastroBotao> {
             minWidth: MediaQuery.of(context).size.width,
             padding: const EdgeInsets.fromLTRB(15, 12, 15, 12),
             onPressed: () {
+              globalKey = GlobalKey();
               Navigator.of(context).push(MaterialPageRoute(
                   builder: (context) => const CadastroView()));
             },

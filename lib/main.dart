@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:doeplus/services/AutenticacaoService.dart';
 import 'package:doeplus/telas/telaInicial.dart';
 import 'package:flutter/material.dart';
@@ -8,6 +10,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   Get.lazyPut<AutenticacaoService>(() => AutenticacaoService());
   await FlutterConfig.loadEnvVariables();
+  HttpOverrides.global = MyHttpOverrides();
   runApp(const MyApp());
 }
 
@@ -24,5 +27,14 @@ class MyApp extends StatelessWidget {
                 ColorScheme.fromSwatch(primarySwatch: Colors.deepPurple)
                     .copyWith(secondary: Colors.deepPurple)),
         home: const TelaInicial());
+  }
+}
+
+class MyHttpOverrides extends HttpOverrides {
+  @override
+  HttpClient createHttpClient(SecurityContext? context) {
+    return super.createHttpClient(context)
+      ..badCertificateCallback =
+          (X509Certificate cert, String host, int port) => true;
   }
 }

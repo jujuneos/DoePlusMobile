@@ -25,6 +25,7 @@ class _BuscaBotaoState extends State<BuscaBotao> {
             minWidth: MediaQuery.of(context).size.width,
             padding: const EdgeInsets.fromLTRB(15, 12, 15, 12),
             onPressed: () {
+              globalKey = GlobalKey();
               Navigator.of(context).push(
                   MaterialPageRoute(builder: (context) => const TelaBusca()));
             },

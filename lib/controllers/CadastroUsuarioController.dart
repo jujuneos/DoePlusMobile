@@ -10,7 +10,7 @@ class CadastroUsuarioController extends GetxController {
   final nome = TextEditingController();
   final email = TextEditingController();
   final senha = TextEditingController();
-  final formKey = GlobalKey<FormState>();
+  final usuarioKey = GlobalKey<FormState>();
 
   var isLogin = true.obs;
   var isLoading = false.obs;
@@ -24,5 +24,11 @@ class CadastroUsuarioController extends GetxController {
 
   toogleRegistrar() {
     isLogin.value = !isLogin.value;
+  }
+
+  limparDados() {
+    nome.text = "";
+    email.text = "";
+    senha.text = "";
   }
 }

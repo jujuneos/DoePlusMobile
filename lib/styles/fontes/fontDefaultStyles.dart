@@ -9,6 +9,12 @@ class FontDefaultStyles {
   static TextStyle sm_1() =>
       TextStyle(fontFamily: fontFamily, fontSize: 13, letterSpacing: 1);
 
+  static TextStyle sm_2() => TextStyle(
+      fontFamily: fontFamily,
+      fontSize: 13,
+      letterSpacing: 1,
+      color: Colors.red);
+
   static TextStyle sm_1_blue() =>
       sm_1().copyWith(color: Colors.blue[900], letterSpacing: 1);
 

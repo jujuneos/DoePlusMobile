@@ -1,5 +1,6 @@
 // ignore: file_names
 import 'package:doeplus/styles/tema/defaultTheme.dart';
+import 'package:doeplus/telas/telaBusca.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -33,7 +34,8 @@ class _DadosAppState extends State<DadosApp> {
                     padding: const EdgeInsets.only(left: 8.0),
                     child: TextButton.icon(
                         onPressed: () {
-                          _launchURL(email);
+                          globalKey = GlobalKey();
+                          _launchURL(Uri.parse(email));
                         },
                         icon: const Icon(FontAwesomeIcons.envelope),
                         label: const Padding(

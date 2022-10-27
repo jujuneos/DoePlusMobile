@@ -1,4 +1,5 @@
 // ignore: file_names
+import 'package:doeplus/telas/telaBusca.dart';
 import 'package:doeplus/views/widgets/botoes/cadastroOngBotao.dart';
 import 'package:doeplus/views/widgets/botoes/cadastroUsuarioBotao.dart';
 import 'package:flutter/material.dart';
@@ -20,6 +21,7 @@ class _CadastroViewState extends State<CadastroView>
         appBar: AppBar(
             leading: IconButton(
                 onPressed: () {
+                  globalKey = GlobalKey();
                   Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(

@@ -1,8 +1,8 @@
+import 'package:doeplus/models/foto.dart';
 import 'package:doeplus/models/ong.dart';
 import 'package:doeplus/services/AutenticacaoService.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:image_picker/image_picker.dart';
 
 class CadastroOngController extends GetxController {
   AutenticacaoService auth = AutenticacaoService();
@@ -19,13 +19,12 @@ class CadastroOngController extends GetxController {
   final conta = TextEditingController();
   final agencia = TextEditingController();
   final picPay = TextEditingController();
-  final formKey = GlobalKey<FormState>();
+  final site = TextEditingController();
+  final cadastroKey = GlobalKey<FormState>();
 
   var isLogin = true.obs;
-  var isLoading = false.obs;
 
-  registrar(var lat, var lng, List<XFile> fotos) async {
-    isLoading.value = true;
+  registrar(var lat, var lng, List<Foto> fotos) async {
     await auth.cadastrarOng(Ong(
         nome: nome.text,
         email: email.text,
@@ -41,8 +40,11 @@ class CadastroOngController extends GetxController {
         agencia: agencia.text,
         conta: conta.text,
         picPay: picPay.text,
+        site: site.text,
+        avaliacao: 0.0,
+        qtdAvaliacao: 0,
+        avaliacaoTotal: 0,
         fotos: fotos));
-    isLoading.value = false;
   }
 
   toogleRegistrar() {

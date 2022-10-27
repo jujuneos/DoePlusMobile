@@ -1,17 +1,17 @@
 // ignore: file_names
 import 'package:doeplus/styles/tema/defaultTheme.dart';
 import 'package:doeplus/telas/telaBusca.dart';
-import 'package:doeplus/views/cadastroUsuarioView.dart';
 import 'package:flutter/material.dart';
+import 'package:doeplus/views/escolhaCadastroView.dart';
 
-class CadastroUsuarioBotao extends StatefulWidget {
-  const CadastroUsuarioBotao({Key? key}) : super(key: key);
+class SairBotao extends StatefulWidget {
+  const SairBotao({Key? key}) : super(key: key);
 
   @override
-  State<CadastroUsuarioBotao> createState() => _CadastroUsuarioBotaoState();
+  State<SairBotao> createState() => _SairBotaoState();
 }
 
-class _CadastroUsuarioBotaoState extends State<CadastroUsuarioBotao> {
+class _SairBotaoState extends State<SairBotao> {
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -26,9 +26,9 @@ class _CadastroUsuarioBotaoState extends State<CadastroUsuarioBotao> {
             onPressed: () {
               globalKey = GlobalKey();
               Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => const CadastroUsuarioView()));
+                  builder: (context) => const CadastroView()));
             },
-            child: const Text("Usuário",
+            child: const Text("Sair",
                 textAlign: TextAlign.center,
                 style: TextStyle(
                     fontFamily: 'HammersmithOne',

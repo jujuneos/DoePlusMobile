@@ -1,4 +1,5 @@
 // ignore: file_names
+import 'package:doeplus/telas/telaBusca.dart';
 import 'package:flutter/material.dart';
 import 'package:doeplus/views/loginView.dart';
 
@@ -22,6 +23,7 @@ class _EntraBotaoState extends State<EntraBotao> {
             minWidth: MediaQuery.of(context).size.width,
             padding: const EdgeInsets.fromLTRB(15, 12, 15, 12),
             onPressed: () {
+              globalKey = GlobalKey();
               Navigator.of(context)
                   .push(MaterialPageRoute(builder: (context) => LoginView()));
             },

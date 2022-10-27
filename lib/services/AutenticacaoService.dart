@@ -1,90 +1,85 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:doeplus/models/ong.dart';
 import 'package:doeplus/models/usuario.dart';
-import 'package:flutter/material.dart';
-import 'package:dio/dio.dart';
-import 'package:http_parser/http_parser.dart';
+import 'package:doeplus/models/usuarioLogin.dart';
+import 'package:doeplus/utils/toast.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AutenticacaoService {
+  static const url = "https://doeplusapi.herokuapp.com/api/";
+
   cadastrarOng(Ong ong) async {
-    FormData formData = FormData.fromMap({
-      "nome": ong.nome,
-      "email": ong.email,
-      "senha": ong.senha,
-      "tipo": ong.tipo,
-      "descricao": ong.descricao,
-      "endereco": ong.endereco,
-      "telefone": ong.telefone,
-      "latitude": ong.latitude,
-      "longitude": ong.longitude,
-      "chavePix": ong.chavePix,
-      "banco": ong.banco,
-      "agencia": ong.agencia,
-      "conta": ong.conta,
-      "picPay": ong.picPay
-    });
+    var urlCadastro = url + "Autenticacao/cadastrarInstituicao";
+
+    var request = http.MultipartRequest('POST', Uri.parse(urlCadastro));
+
+    request.headers['Content-Type'] =
+        "multipart/form-data; boundary=<calculated when request is sent>";
+
+    request.fields['nome'] = ong.nome;
+    request.fields['email'] = ong.email;
+    request.fields['senha'] = ong.senha;
+    request.fields['tipo'] = ong.tipo;
+    request.fields['descricao'] = ong.descricao;
+    request.fields['endereco'] = ong.endereco;
+    request.fields['telefone'] = ong.telefone;
+    request.fields['site'] = ong.site!;
+    request.fields['latitude'] = ong.latitude.toString();
+    request.fields['longitude'] = ong.longitude.toString();
+    request.fields['avaliacao'] = ong.avaliacao.toString();
+    request.fields['avaliacaoTotal'] = ong.avaliacaoTotal.toString();
+    request.fields['qtdAvaliacao'] = ong.qtdAvaliacao.toString();
+    request.fields['chavePix'] = ong.chavePix!;
+    request.fields['banco'] = ong.banco!;
+    request.fields['agencia'] = ong.agencia!;
+    request.fields['conta'] = ong.conta!;
+    request.fields['picPay'] = ong.picPay!;
 
     if (ong.fotos.isNotEmpty) {
       for (var foto in ong.fotos) {
-        formData.files.add(MapEntry(
-            "fotos",
-            await MultipartFile.fromFile(foto.path,
-                filename: foto.name, contentType: MediaType("image", "jpeg"))));
+        request.files.add(http.MultipartFile.fromBytes(
+            'fotos', File(foto.path!).readAsBytesSync(),
+            filename: foto.path));
       }
     }
 
-    Response response;
-    Dio dio = Dio();
-
-    response = await dio.post(
-        "https://doeplusapi.herokuapp.com/api/Autenticacao/cadastrarInstituicao",
-        data: formData,
-        options: Options(
-            headers: {'accept': "*/*", "Content-type": "application/json"}));
-    if (response.statusCode == 200) {
-      showSnack("Sucesso", "Instituição cadastrada com sucesso!");
-    } else {
-      showSnack("Erro", "Não foi possível cadastrar a Instituição.");
-    }
+    await request.send();
   }
 
-  cadastrarUsuario(Usuario usuario) {
+  cadastrarUsuario(Usuario usuario) async {
+    var urlCadastroUser =
+        "https://doeplusapi.herokuapp.com/api/Autenticacao/cadastrarUsuario";
+
+    await http.post(Uri.parse(urlCadastroUser),
+        body: jsonEncode({
+          "nome": usuario.nome,
+          "email": usuario.email,
+          "senha": usuario.senha
+        }),
+        headers: {"Content-Type": "application/json"});
+  }
+
+  fazerLogin(String email, String senha) async {
     try {
-      http.post(
-          Uri.parse(
-              'https://doeplusapi.herokuapp.com/api/Autenticacao/cadastrarUsuario'),
-          body: jsonEncode({
-            "nome": usuario.nome,
-            "email": usuario.email,
-            "senha": usuario.senha
-          }));
-    } catch (e) {
-      showSnack('Erro ao registrar!', e.toString());
-    }
-  }
+      var prefs = SharedPreferences.getInstance();
+      var usuario;
 
-  showSnack(String titulo, String mensagem) {
-    final snackbar = SnackBar(
-      content: Text(titulo + '\n' + mensagem),
-      backgroundColor: Colors.white,
-      elevation: 100,
-      action: SnackBarAction(
-        label: 'Voltar',
-        onPressed: () {},
-      ),
-    );
-    return snackbar;
-  }
-
-  fazerLogin(String email, String senha) {
-    try {
-      http.post(
+      var response = await http.post(
           Uri.parse('https://doeplusapi.herokuapp.com/api/Autenticacao/login'),
-          body: jsonEncode({"email": email, "senha": senha}));
+          body: jsonEncode({"email": email, "senha": senha}),
+          headers: {"Content-Type": "application/json"});
+
+      Map mapResponse = json.decode(response.body);
+
+      if (response.statusCode == 200) {
+        usuario = UsuarioLogin.fromJson(mapResponse);
+      }
+      ToastGenerico.mostrarMensagemSucesso("Login efetuado com sucesso.");
     } catch (e) {
-      showSnack('Erro no login!', e.toString());
+      ToastGenerico.mostrarMensagemErro(e.toString());
     }
   }
 }
