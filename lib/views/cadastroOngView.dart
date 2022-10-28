@@ -424,7 +424,7 @@ class _CadastroOngView extends State<CadastroOngView> {
 
     try {
       String url =
-          "https://maps.googleapis.com/maps/api/geocode/json?address=${controller.endereco.text}&key=AIzaSyDl3y4dN1jwbSi6FQE11vzvXZk_l5ERlKA";
+          "https://maps.googleapis.com/maps/api/geocode/json?address=${controller.endereco.text}&key=chaveApi";
 
       final response = await http.get(Uri.parse(url));
 
