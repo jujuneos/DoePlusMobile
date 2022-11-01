@@ -2,7 +2,6 @@
 import 'package:doeplus/styles/tema/defaultTheme.dart';
 import 'package:doeplus/telas/telaBusca.dart';
 import 'package:flutter/material.dart';
-import 'package:doeplus/views/escolhaCadastroView.dart';
 
 class OngsFavoritasBotao extends StatefulWidget {
   const OngsFavoritasBotao({Key? key}) : super(key: key);
@@ -25,8 +24,8 @@ class _OngsFavoritasBotaoState extends State<OngsFavoritasBotao> {
             padding: const EdgeInsets.fromLTRB(15, 12, 15, 12),
             onPressed: () {
               globalKey = GlobalKey();
-              Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => const CadastroView()));
+              // Navigator.of(context).push(MaterialPageRoute(
+              //     builder: (context) => const OngsFavoritasView()));
             },
             child: const Text("ONGs Favoritas",
                 textAlign: TextAlign.center,

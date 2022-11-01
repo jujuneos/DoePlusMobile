@@ -1,9 +1,12 @@
 // ignore: file_names
+import 'package:doeplus/controllers/OngsController.dart';
+import 'package:doeplus/telas/telaBusca.dart';
 import 'package:flutter/material.dart';
 import 'package:doeplus/views/widgets/widgetNavegacao.dart';
 import 'package:doeplus/views/widgets/botoes/buscaBotao.dart';
 import 'package:doeplus/views/widgets/botoes/cadastroBotao.dart';
 import 'package:doeplus/views/widgets/botoes/entraBotao.dart';
+import 'package:get/get.dart';
 
 class InicioView extends StatefulWidget {
   const InicioView({Key? key}) : super(key: key);
@@ -19,6 +22,12 @@ class _InicioViewState extends State<InicioView> {
   }
 
   Widget _inicioScreen() {
+    final controller = Get.put(OngsController());
+    setState(() {
+      globalKey = GlobalKey();
+      controller.loadOngs();
+    });
+
     return WillPopScope(
       onWillPop: () async => false,
       child: GestureDetector(

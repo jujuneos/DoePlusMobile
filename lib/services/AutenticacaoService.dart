@@ -4,9 +4,9 @@ import 'dart:io';
 import 'package:doeplus/models/ong.dart';
 import 'package:doeplus/models/usuario.dart';
 import 'package:doeplus/models/usuarioLogin.dart';
+import 'package:doeplus/utils/apiResponse.dart';
 import 'package:doeplus/utils/toast.dart';
 import 'package:http/http.dart' as http;
-import 'package:shared_preferences/shared_preferences.dart';
 
 class AutenticacaoService {
   static const url = "https://doeplusapi.herokuapp.com/api/";
@@ -62,24 +62,27 @@ class AutenticacaoService {
         headers: {"Content-Type": "application/json"});
   }
 
-  fazerLogin(String email, String senha) async {
+  Future<ApiResponse<UsuarioLogin>> fazerLogin(
+      String user, String senha, UsuarioLogin? usuario) async {
     try {
-      var prefs = SharedPreferences.getInstance();
-      var usuario;
-
       var response = await http.post(
           Uri.parse('https://doeplusapi.herokuapp.com/api/Autenticacao/login'),
-          body: jsonEncode({"email": email, "senha": senha}),
+          body: jsonEncode({"UserName": user, "senha": senha}),
           headers: {"Content-Type": "application/json"});
 
       Map mapResponse = json.decode(response.body);
 
       if (response.statusCode == 200) {
         usuario = UsuarioLogin.fromJson(mapResponse);
+        ToastGenerico.mostrarMensagemSucesso("Login efetuado com sucesso.");
+        return ApiResponse.ok(usuario);
+      } else {
+        ToastGenerico.mostrarMensagemErro("Erro ao fazer login.");
+        return ApiResponse.error("Erro ao fazer login");
       }
-      ToastGenerico.mostrarMensagemSucesso("Login efetuado com sucesso.");
-    } catch (e) {
-      ToastGenerico.mostrarMensagemErro(e.toString());
+    } catch (error, exception) {
+      ToastGenerico.mostrarMensagemErro("Erro: $error > $exception");
+      return ApiResponse.error("Sem comunicação... Tente mais tarde.");
     }
   }
 }

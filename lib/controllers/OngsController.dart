@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:doeplus/models/ongView.dart';
+import 'package:doeplus/models/usuarioLogin.dart';
 import 'package:doeplus/telas/telaBusca.dart';
 import 'package:doeplus/views/widgets/ongInfo.dart';
 import 'package:flutter/material.dart';
@@ -22,6 +23,30 @@ class OngsController extends GetxController {
   var url = "https://doeplusapi.herokuapp.com/api/";
 
   get mapsController => _mapsController;
+
+  avaliarOng(OngView ong, double avaliacao, String token) async {
+    var urlAvaliacao = url + 'Instituicoes/Avaliar/${ong.id}';
+
+    var response = await http.post(Uri.parse(urlAvaliacao),
+        body: jsonEncode({"avaliacao": avaliacao}),
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer $token"
+        });
+
+    return response;
+  }
+
+  favoritar(OngView ong, String token) async {
+    var urlFavoritar = url + 'Usuarios/favoritar/${ong.id}';
+
+    var response = await http.post(Uri.parse(urlFavoritar), headers: {
+      "Content-Type": "application/json",
+      "Authorization": "Bearer $token"
+    });
+
+    return response;
+  }
 
   filtrarOngs(String tipo) async {
     List<OngView> ongsFiltro = [];

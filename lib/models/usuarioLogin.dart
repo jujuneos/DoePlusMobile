@@ -1,15 +1,25 @@
-import 'dart:convert';
-
-UsuarioLogin usuarioFromJson(String str) =>
-    UsuarioLogin.fromJson(json.decode(str));
-
+// ignore: file_names
 class UsuarioLogin {
-  String nome;
-  String senha;
+  String? token;
+  String? expiration;
+  bool? authenticated;
+  String? message;
 
-  UsuarioLogin({required this.nome, required this.senha});
+  UsuarioLogin({this.token, this.expiration, this.authenticated, this.message});
 
-  factory UsuarioLogin.fromJson(Map<dynamic, dynamic> json) {
-    return UsuarioLogin(nome: json["nome"], senha: json["senha"]);
+  UsuarioLogin.fromJson(Map<dynamic, dynamic> json) {
+    token = json['token'];
+    expiration = json['expiration'];
+    authenticated = json['authenticated'];
+    message = json['message'];
+  }
+
+  Map<dynamic, dynamic> toJson() {
+    final Map<dynamic, dynamic> data = <dynamic, dynamic>{};
+    data['token'] = token;
+    data['expiration'] = expiration;
+    data['authenticated'] = authenticated;
+    data['message'] = message;
+    return data;
   }
 }
