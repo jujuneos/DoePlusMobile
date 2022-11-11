@@ -1,16 +1,16 @@
 // ignore: file_names
-import 'package:doeplus/styles/tema/defaultTheme.dart';
-import 'package:doeplus/telas/telaBusca.dart';
+import 'package:doeplus/styles/tema/default_theme.dart';
+import 'package:doeplus/views/cadastro_ong_view.dart';
 import 'package:flutter/material.dart';
 
-class OngsFavoritasBotao extends StatefulWidget {
-  const OngsFavoritasBotao({Key? key}) : super(key: key);
+class CadastroOngBotao extends StatefulWidget {
+  const CadastroOngBotao({Key? key}) : super(key: key);
 
   @override
-  State<OngsFavoritasBotao> createState() => _OngsFavoritasBotaoState();
+  State<CadastroOngBotao> createState() => _CadastroOngBotaoState();
 }
 
-class _OngsFavoritasBotaoState extends State<OngsFavoritasBotao> {
+class _CadastroOngBotaoState extends State<CadastroOngBotao> {
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -23,11 +23,11 @@ class _OngsFavoritasBotaoState extends State<OngsFavoritasBotao> {
             minWidth: MediaQuery.of(context).size.width,
             padding: const EdgeInsets.fromLTRB(15, 12, 15, 12),
             onPressed: () {
-              globalKey = GlobalKey();
-              // Navigator.of(context).push(MaterialPageRoute(
-              //     builder: (context) => const OngsFavoritasView()));
+              globalOngKey = GlobalKey();
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => const CadastroOngView()));
             },
-            child: const Text("ONGs Favoritas",
+            child: const Text("Instituição",
                 textAlign: TextAlign.center,
                 style: TextStyle(
                     fontFamily: 'HammersmithOne',

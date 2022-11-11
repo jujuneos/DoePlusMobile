@@ -1,8 +1,8 @@
 // ignore: file_names
-import 'package:doeplus/styles/tema/defaultTheme.dart';
-import 'package:doeplus/telas/telaBusca.dart';
+import 'package:doeplus/styles/tema/default_theme.dart';
+import 'package:doeplus/telas/tela_busca.dart';
 import 'package:flutter/material.dart';
-import 'package:doeplus/views/escolhaCadastroView.dart';
+import 'package:doeplus/views/escolha_cadastro_view.dart';
 
 class CadastroBotao extends StatefulWidget {
   const CadastroBotao({Key? key}) : super(key: key);

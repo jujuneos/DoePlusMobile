@@ -1,18 +1,17 @@
-import 'package:doeplus/controllers/LoginController.dart';
-import 'package:doeplus/controllers/OngsController.dart';
-import 'package:doeplus/models/ongView.dart';
-import 'package:doeplus/styles/fontes/fontDefaultStyles.dart';
-import 'package:doeplus/styles/tema/defaultTheme.dart';
-import 'package:doeplus/telas/telaBusca.dart';
+import 'package:doeplus/controllers/login_controller.dart';
+import 'package:doeplus/controllers/ongs_controller.dart';
+import 'package:doeplus/models/ong_view.dart';
+import 'package:doeplus/styles/fontes/font_default_styles.dart';
+import 'package:doeplus/styles/tema/default_theme.dart';
 import 'package:doeplus/utils/toast.dart';
-import 'package:doeplus/views/loginView.dart';
-import 'package:doeplus/views/paginaOngView.dart';
+import 'package:doeplus/views/login_view.dart';
+import 'package:doeplus/views/pagina_ong_view.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_overlay_loader/flutter_overlay_loader.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:get/get.dart';
 
-const avKey1 = Key("Avkey1");
-
+// ignore: must_be_immutable
 class AvaliacaoView extends StatelessWidget {
   OngView ong;
   AvaliacaoView({Key? key, required this.ong}) : super(key: key);
@@ -24,10 +23,9 @@ class AvaliacaoView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-            key: avKey1,
             leading: IconButton(
                 onPressed: () {
-                  globalKey = GlobalKey();
+                  Navigator.pop(context);
                   Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
@@ -60,12 +58,22 @@ class AvaliacaoView extends StatelessWidget {
                 direction: Axis.horizontal,
                 allowHalfRating: true,
                 itemCount: 5,
-                itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
+                itemPadding:
+                    const EdgeInsets.symmetric(horizontal: 4.0, vertical: 5.0),
                 itemBuilder: (context, _) =>
                     const Icon(Icons.star, color: Colors.amber),
                 onRatingUpdate: (rating) {
                   avaliacao = rating;
                 }),
+            const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                child: Text(
+                  "Você pode escrever algo, se quiser.",
+                  style: TextStyle(
+                      color: Color.fromRGBO(204, 14, 221, 10),
+                      fontFamily: 'HammersmithOne',
+                      fontSize: 15),
+                )),
             Padding(
                 padding: const EdgeInsets.fromLTRB(60, 15, 60, 15),
                 child: TextFormField(
@@ -74,49 +82,42 @@ class AvaliacaoView extends StatelessWidget {
                   decoration: InputDecoration(
                       contentPadding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
                       border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(20)),
-                      labelText:
-                          'Você pode descrever sua experiência, se quiser.'),
+                          borderRadius: BorderRadius.circular(20))),
                 )),
-            Material(
-                elevation: 5.0,
-                borderRadius: BorderRadius.circular(20),
-                color: DefaultTheme.getColor(),
-                child: MaterialButton(
-                    minWidth: MediaQuery.of(context).size.width,
-                    padding: const EdgeInsets.fromLTRB(10, 8, 10, 8),
-                    onPressed: () {
-                      globalKey = GlobalKey();
-                      if (loginController.usuario != null) {
-                        var response = controller.avaliarOng(ong, avaliacao,
-                            loginController.usuario?.token ?? "");
-                        if (response == 200) {
-                          ToastGenerico.mostrarMensagemSucesso(
-                              "Avaliação enviada com sucesso!");
+            Padding(
+              padding: const EdgeInsets.fromLTRB(40, 12, 40, 12),
+              child: Material(
+                  elevation: 5.0,
+                  borderRadius: BorderRadius.circular(20),
+                  color: DefaultTheme.getColor(),
+                  child: MaterialButton(
+                      minWidth: MediaQuery.of(context).size.width,
+                      padding: const EdgeInsets.fromLTRB(15, 12, 15, 12),
+                      onPressed: () {
+                        globalLoginKey = GlobalKey();
+                        if (userGlobal != null) {
+                          Loader.show(context,
+                              progressIndicator: CircularProgressIndicator(
+                                  color: DefaultTheme.getColor()));
+                          controller.avaliarOng(
+                              ong, avaliacao, tokenGlobal!, context);
+                        } else {
+                          ToastGenerico.mostrarMensagemErro(
+                              "É necessário fazer o login.");
+                          Navigator.pop(context);
                           Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) =>
-                                      PaginaOngView(ong: ong)));
-                        } else {
-                          ToastGenerico.mostrarMensagemErro(
-                              "Erro! Avaliação não enviada.");
+                                  builder: (context) => const LoginView()));
                         }
-                      } else {
-                        ToastGenerico.mostrarMensagemErro(
-                            "É necessário fazer o login.");
-                        Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => LoginView()));
-                      }
-                    },
-                    child: const Text("Selecionar",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            fontFamily: 'HammersmithOne',
-                            color: Colors.white,
-                            fontSize: 20))))
+                      },
+                      child: const Text("Avaliar",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              fontFamily: 'HammersmithOne',
+                              color: Colors.white,
+                              fontSize: 20)))),
+            )
           ],
         ));
   }

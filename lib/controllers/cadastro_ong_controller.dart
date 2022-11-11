@@ -1,6 +1,6 @@
 import 'package:doeplus/models/foto.dart';
 import 'package:doeplus/models/ong.dart';
-import 'package:doeplus/services/AutenticacaoService.dart';
+import 'package:doeplus/services/autenticacao_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -24,27 +24,29 @@ class CadastroOngController extends GetxController {
 
   var isLogin = true.obs;
 
-  registrar(var lat, var lng, List<Foto> fotos) async {
-    await auth.cadastrarOng(Ong(
-        nome: nome.text,
-        email: email.text,
-        senha: senha.text,
-        descricao: descricao.text,
-        endereco: endereco.text,
-        tipo: tipo.text,
-        telefone: telefone.text,
-        latitude: lat,
-        longitude: lng,
-        chavePix: chavePix.text,
-        banco: banco.text,
-        agencia: agencia.text,
-        conta: conta.text,
-        picPay: picPay.text,
-        site: site.text,
-        avaliacao: 0.0,
-        qtdAvaliacao: 0,
-        avaliacaoTotal: 0,
-        fotos: fotos));
+  registrar(var lat, var lng, List<Foto> fotos, BuildContext context) async {
+    await auth.cadastrarOng(
+        Ong(
+            nome: nome.text,
+            email: email.text,
+            senha: senha.text,
+            descricao: descricao.text,
+            endereco: endereco.text,
+            tipo: tipo.text,
+            telefone: telefone.text,
+            latitude: lat,
+            longitude: lng,
+            chavePix: chavePix.text,
+            banco: banco.text,
+            agencia: agencia.text,
+            conta: conta.text,
+            picPay: picPay.text,
+            site: site.text,
+            avaliacao: 0.0,
+            qtdAvaliacao: 0,
+            avaliacaoTotal: 0,
+            fotos: fotos),
+        context);
   }
 
   toogleRegistrar() {
@@ -64,5 +66,6 @@ class CadastroOngController extends GetxController {
     agencia.text = "";
     conta.text = "";
     picPay.text = "";
+    site.text = "";
   }
 }

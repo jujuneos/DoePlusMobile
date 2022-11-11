@@ -1,9 +1,7 @@
-// ignore: file_names
-import 'package:doeplus/telas/telaBusca.dart';
-import 'package:doeplus/views/widgets/botoes/cadastroOngBotao.dart';
-import 'package:doeplus/views/widgets/botoes/cadastroUsuarioBotao.dart';
+import 'package:doeplus/views/widgets/botoes/cadastro_ong_botao.dart';
+import 'package:doeplus/views/widgets/botoes/cadastro_usuario_botao.dart';
 import 'package:flutter/material.dart';
-import 'package:doeplus/views/inicioView.dart';
+import 'package:doeplus/views/inicio_view.dart';
 
 class CadastroView extends StatefulWidget {
   const CadastroView({Key? key}) : super(key: key);
@@ -12,8 +10,7 @@ class CadastroView extends StatefulWidget {
   _CadastroViewState createState() => _CadastroViewState();
 }
 
-class _CadastroViewState extends State<CadastroView>
-    with AutomaticKeepAliveClientMixin<CadastroView> {
+class _CadastroViewState extends State<CadastroView> {
   @override
   // ignore: must_call_super
   Widget build(BuildContext context) {
@@ -21,7 +18,7 @@ class _CadastroViewState extends State<CadastroView>
         appBar: AppBar(
             leading: IconButton(
                 onPressed: () {
-                  globalKey = GlobalKey();
+                  Navigator.pop(context);
                   Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
@@ -56,7 +53,4 @@ class _CadastroViewState extends State<CadastroView>
                           )
                         ]))))));
   }
-
-  @override
-  bool get wantKeepAlive => true;
 }

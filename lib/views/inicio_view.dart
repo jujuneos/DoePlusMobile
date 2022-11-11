@@ -1,18 +1,17 @@
-// ignore: file_names
-import 'package:doeplus/views/widgets/botoes/ongsFavoritasBotao.dart';
-import 'package:doeplus/views/widgets/botoes/sairBotao.dart';
 import 'package:flutter/material.dart';
-import 'package:doeplus/views/widgets/widgetNavegacao.dart';
-import 'package:doeplus/views/widgets/botoes/buscaBotao.dart';
+import 'package:doeplus/views/widgets/widget_navegacao.dart';
+import 'package:doeplus/views/widgets/botoes/busca_botao.dart';
+import 'package:doeplus/views/widgets/botoes/cadastro_botao.dart';
+import 'package:doeplus/views/widgets/botoes/entra_botao.dart';
 
-class InicioViewLogado extends StatefulWidget {
-  const InicioViewLogado({Key? key}) : super(key: key);
+class InicioView extends StatefulWidget {
+  const InicioView({Key? key}) : super(key: key);
 
   @override
-  _InicioViewLogadoState createState() => _InicioViewLogadoState();
+  _InicioViewState createState() => _InicioViewState();
 }
 
-class _InicioViewLogadoState extends State<InicioViewLogado> {
+class _InicioViewState extends State<InicioView> {
   @override
   Widget build(BuildContext context) {
     return _inicioScreen();
@@ -50,8 +49,8 @@ class _InicioViewLogadoState extends State<InicioViewLogado> {
                         Column(
                           children: const [
                             BuscaBotao(),
-                            OngsFavoritasBotao(),
-                            SairBotao()
+                            CadastroBotao(),
+                            EntraBotao()
                           ],
                         )
                       ]),

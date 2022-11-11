@@ -1,33 +1,23 @@
-// ignore: file_names
-import 'package:doeplus/controllers/OngsController.dart';
-import 'package:doeplus/telas/telaBusca.dart';
+import 'package:doeplus/views/widgets/botoes/ongs_favoritas_botao.dart';
+import 'package:doeplus/views/widgets/botoes/sair_botao.dart';
 import 'package:flutter/material.dart';
-import 'package:doeplus/views/widgets/widgetNavegacao.dart';
-import 'package:doeplus/views/widgets/botoes/buscaBotao.dart';
-import 'package:doeplus/views/widgets/botoes/cadastroBotao.dart';
-import 'package:doeplus/views/widgets/botoes/entraBotao.dart';
-import 'package:get/get.dart';
+import 'package:doeplus/views/widgets/widget_navegacao.dart';
+import 'package:doeplus/views/widgets/botoes/busca_botao.dart';
 
-class InicioView extends StatefulWidget {
-  const InicioView({Key? key}) : super(key: key);
+class InicioViewLogado extends StatefulWidget {
+  const InicioViewLogado({Key? key}) : super(key: key);
 
   @override
-  _InicioViewState createState() => _InicioViewState();
+  _InicioViewLogadoState createState() => _InicioViewLogadoState();
 }
 
-class _InicioViewState extends State<InicioView> {
+class _InicioViewLogadoState extends State<InicioViewLogado> {
   @override
   Widget build(BuildContext context) {
     return _inicioScreen();
   }
 
   Widget _inicioScreen() {
-    final controller = Get.put(OngsController());
-    setState(() {
-      globalKey = GlobalKey();
-      controller.loadOngs();
-    });
-
     return WillPopScope(
       onWillPop: () async => false,
       child: GestureDetector(
@@ -55,12 +45,11 @@ class _InicioViewState extends State<InicioView> {
                           child: Image.asset("assets/images/doeplus-logo.png"),
                         ),
                         Container(height: 50),
-                        // ignore: prefer_const_literals_to_create_immutables
                         Column(
                           children: const [
                             BuscaBotao(),
-                            CadastroBotao(),
-                            EntraBotao()
+                            OngsFavoritasBotao(),
+                            SairBotao()
                           ],
                         )
                       ]),

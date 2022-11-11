@@ -1,5 +1,5 @@
 // ignore: file_names
-import 'package:doeplus/views/widgets/widgetDadosApp.dart';
+import 'package:doeplus/views/widgets/widget_dados_app.dart';
 import 'package:flutter/material.dart';
 
 class NavegacaoWidget extends StatelessWidget {

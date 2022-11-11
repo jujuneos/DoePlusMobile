@@ -1,14 +1,12 @@
-// ignore: file_names
-
-import 'package:doeplus/controllers/CadastroUsuarioController.dart';
-import 'package:doeplus/styles/fontes/fontDefaultStyles.dart';
-import 'package:doeplus/styles/tema/defaultTheme.dart';
-import 'package:doeplus/telas/telaBusca.dart';
-import 'package:doeplus/viewModels/cadastroViewModel.dart';
+import 'package:doeplus/controllers/cadastro_usuario_controller.dart';
+import 'package:doeplus/styles/fontes/font_default_styles.dart';
+import 'package:doeplus/styles/tema/default_theme.dart';
 import 'package:flutter/material.dart';
-import 'package:doeplus/views/inicioView.dart';
+import 'package:doeplus/views/inicio_view.dart';
+import 'package:flutter_overlay_loader/flutter_overlay_loader.dart';
 import 'package:get/get.dart';
-import 'package:doeplus/utils/toast.dart';
+
+GlobalKey globalUsuarioKey = GlobalKey();
 
 // ignore: must_be_immutable
 class CadastroUsuarioView extends StatefulWidget {
@@ -19,12 +17,12 @@ class CadastroUsuarioView extends StatefulWidget {
 }
 
 class _CadastroUsuarioView extends State<CadastroUsuarioView> {
-  var model = CadastroViewModel();
   final controller = Get.put(CadastroUsuarioController());
   bool mostraSenha = false;
 
   @override
   Widget build(BuildContext context) {
+    globalUsuarioKey = GlobalKey();
     return WillPopScope(
         onWillPop: () async => false,
         child: GestureDetector(
@@ -33,14 +31,28 @@ class _CadastroUsuarioView extends State<CadastroUsuarioView> {
                 appBar: AppBar(
                     leading: IconButton(
                         onPressed: () {
-                          globalKey = GlobalKey();
+                          Navigator.pop(context);
                           Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(
                                   builder: (context) => const InicioView()));
                         },
                         icon: const Icon(Icons.arrow_back)),
-                    title: const Text("Doe+"),
+                    title: Row(children: <Widget>[
+                      Padding(
+                          padding: const EdgeInsets.fromLTRB(80, 10, 2, 10),
+                          child: SizedBox(
+                              height: 25,
+                              child: Image.asset(
+                                  "assets/images/doeplus-logo.png"))),
+                      const Padding(
+                          padding: EdgeInsets.fromLTRB(2, 10, 50, 10),
+                          child: Text("Doe+",
+                              style: TextStyle(
+                                  color: Color.fromRGBO(204, 14, 221, 10),
+                                  fontFamily: "HammersmithOne",
+                                  fontSize: 25)))
+                    ]),
                     backgroundColor: Colors.transparent,
                     elevation: 0,
                     iconTheme: const IconThemeData(
@@ -63,31 +75,11 @@ class _CadastroUsuarioView extends State<CadastroUsuarioView> {
                                     border: OutlineInputBorder(
                                         borderRadius:
                                             BorderRadius.circular(20)),
-                                    labelText: 'Nome'),
-                                validator: (value) {
-                                  if (value.toString().isEmpty) {
-                                    return 'Informe um nome!';
-                                  }
-                                  return null;
-                                },
-                              )),
-                          Padding(
-                              padding:
-                                  const EdgeInsets.fromLTRB(60, 15, 60, 15),
-                              child: TextFormField(
-                                controller: controller.email,
-                                style: FontDefaultStyles.sm(),
-                                decoration: InputDecoration(
-                                    contentPadding: const EdgeInsets.fromLTRB(
-                                        20, 15, 20, 15),
-                                    border: OutlineInputBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(20)),
-                                    labelText: 'E-mail'),
+                                    labelText: 'Usuário'),
                                 keyboardType: TextInputType.emailAddress,
                                 validator: (value) {
                                   if (value.toString().isEmpty) {
-                                    return 'Informe um E-mail!';
+                                    return 'Informe um usuário!';
                                   }
                                   return null;
                                 },
@@ -140,19 +132,13 @@ class _CadastroUsuarioView extends State<CadastroUsuarioView> {
                                     onPressed: () {
                                       if (controller.usuarioKey.currentState!
                                           .validate()) {
-                                        controller.registrar();
-                                        ToastGenerico.mostrarMensagemSucesso(
-                                            "Usuário cadastrado com sucesso!");
-                                        Navigator.pop(context);
-                                        Navigator.of(context).push(
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    const InicioView()));
+                                        Loader.show(context,
+                                            progressIndicator:
+                                                CircularProgressIndicator(
+                                                    color: DefaultTheme
+                                                        .getColor()));
+                                        controller.registrar(context);
                                         controller.limparDados();
-                                        globalKey = GlobalKey();
-                                      } else {
-                                        ToastGenerico.mostrarMensagemErro(
-                                            "Erro! Usuário não cadastrado.");
                                       }
                                     },
                                     child: const Text("Registrar",
@@ -170,7 +156,4 @@ class _CadastroUsuarioView extends State<CadastroUsuarioView> {
       mostraSenha = !mostraSenha;
     });
   }
-
-  @override
-  bool get wantKeepAlive => true;
 }

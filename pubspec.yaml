@@ -53,6 +53,7 @@ dependencies:
   url_launcher:
   provider: ^6.0.3
   flutter_rating_bar: ^4.0.1
+  brasil_fields:
 
 dev_dependencies:
   flutter_test:

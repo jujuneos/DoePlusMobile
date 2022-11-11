@@ -1,7 +1,7 @@
 // ignore: file_names
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
-import 'package:doeplus/views/inicioView.dart';
+import 'package:doeplus/views/inicio_view.dart';
 
 class SplashView extends StatefulWidget {
   const SplashView({Key? key}) : super(key: key);
@@ -40,7 +40,7 @@ class SplashScreenView extends StatelessWidget {
       child: Scaffold(
           body: Center(
         child: Column(children: [
-          const SizedBox(height: 140),
+          const SizedBox(height: 82),
           const Text('Doe+',
               style: TextStyle(
                   color: Color.fromRGBO(204, 14, 221, 10),

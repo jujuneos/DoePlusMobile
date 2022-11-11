@@ -2,24 +2,20 @@ import 'package:doeplus/models/usuario.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../services/AutenticacaoService.dart';
+import '../services/autenticacao_service.dart';
 
 class CadastroUsuarioController extends GetxController {
   AutenticacaoService auth = AutenticacaoService();
 
   final nome = TextEditingController();
-  final email = TextEditingController();
   final senha = TextEditingController();
   final usuarioKey = GlobalKey<FormState>();
 
   var isLogin = true.obs;
-  var isLoading = false.obs;
 
-  registrar() async {
-    isLoading.value = true;
+  registrar(BuildContext context) async {
     await auth.cadastrarUsuario(
-        Usuario(nome: nome.text, email: email.text, senha: senha.text));
-    isLoading.value = false;
+        Usuario(nome: nome.text, senha: senha.text), context);
   }
 
   toogleRegistrar() {
@@ -28,7 +24,6 @@ class CadastroUsuarioController extends GetxController {
 
   limparDados() {
     nome.text = "";
-    email.text = "";
     senha.text = "";
   }
 }

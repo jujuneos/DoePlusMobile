@@ -1,9 +1,9 @@
 import 'dart:convert';
 
-import 'package:doeplus/models/ongView.dart';
-import 'package:doeplus/styles/tema/defaultTheme.dart';
-import 'package:doeplus/telas/telaBusca.dart';
-import 'package:doeplus/views/paginaOngView.dart';
+import 'package:doeplus/models/ong_view.dart';
+import 'package:doeplus/styles/tema/default_theme.dart';
+import 'package:doeplus/telas/tela_busca.dart';
+import 'package:doeplus/views/pagina_ong_view.dart';
 import 'package:flutter/material.dart';
 
 class OngInfo extends State {

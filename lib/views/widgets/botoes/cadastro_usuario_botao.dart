@@ -1,7 +1,6 @@
 // ignore: file_names
-import 'package:doeplus/styles/tema/defaultTheme.dart';
-import 'package:doeplus/telas/telaBusca.dart';
-import 'package:doeplus/views/cadastroUsuarioView.dart';
+import 'package:doeplus/styles/tema/default_theme.dart';
+import 'package:doeplus/views/cadastro_usuario_view.dart';
 import 'package:flutter/material.dart';
 
 class CadastroUsuarioBotao extends StatefulWidget {
@@ -24,7 +23,7 @@ class _CadastroUsuarioBotaoState extends State<CadastroUsuarioBotao> {
             minWidth: MediaQuery.of(context).size.width,
             padding: const EdgeInsets.fromLTRB(15, 12, 15, 12),
             onPressed: () {
-              globalKey = GlobalKey();
+              globalUsuarioKey = GlobalKey();
               Navigator.of(context).push(MaterialPageRoute(
                   builder: (context) => const CadastroUsuarioView()));
             },

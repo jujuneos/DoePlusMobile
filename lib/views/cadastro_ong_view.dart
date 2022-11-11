@@ -1,21 +1,22 @@
-// ignore: file_names
 import 'dart:convert';
 
-import 'package:doeplus/controllers/CadastroOngController.dart';
+import 'package:brasil_fields/brasil_fields.dart';
+import 'package:doeplus/controllers/cadastro_ong_controller.dart';
 import 'package:doeplus/models/foto.dart';
-import 'package:doeplus/styles/fontes/fontDefaultStyles.dart';
-import 'package:doeplus/styles/tema/defaultTheme.dart';
-import 'package:doeplus/telas/telaBusca.dart';
-import 'package:doeplus/utils/EnderecoJson.dart';
-import 'package:doeplus/utils/maskUtils.dart';
-import 'package:doeplus/viewModels/cadastroViewModel.dart';
+import 'package:doeplus/styles/fontes/font_default_styles.dart';
+import 'package:doeplus/styles/tema/default_theme.dart';
+import 'package:doeplus/utils/endereco_json.dart';
 import 'package:flutter/material.dart';
-import 'package:doeplus/views/inicioView.dart';
+import 'package:doeplus/views/inicio_view.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_overlay_loader/flutter_overlay_loader.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 import 'package:mime_type/mime_type.dart';
 import 'package:doeplus/utils/toast.dart';
+
+GlobalKey globalOngKey = GlobalKey();
 
 // ignore: must_be_immutable
 class CadastroOngView extends StatefulWidget {
@@ -26,7 +27,6 @@ class CadastroOngView extends StatefulWidget {
 }
 
 class _CadastroOngView extends State<CadastroOngView> {
-  var model = CadastroViewModel();
   final controller = Get.put(CadastroOngController());
   String tipoOng = "Escolha o tipo";
   bool mostraSenha = false;
@@ -84,6 +84,7 @@ class _CadastroOngView extends State<CadastroOngView> {
 
   @override
   Widget build(BuildContext context) {
+    globalOngKey = GlobalKey();
     return WillPopScope(
         onWillPop: () async => false,
         child: GestureDetector(
@@ -92,7 +93,7 @@ class _CadastroOngView extends State<CadastroOngView> {
                 appBar: AppBar(
                     leading: IconButton(
                         onPressed: () {
-                          globalKey = GlobalKey();
+                          Navigator.pop(context);
                           Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(
@@ -149,16 +150,10 @@ class _CadastroOngView extends State<CadastroOngView> {
                                         borderRadius:
                                             BorderRadius.circular(20)),
                                     labelText: 'Telefone'),
-                                inputFormatters:
-                                    controller.telefone.text.length <= 14
-                                        ? [
-                                            MaskUtils
-                                                .maskFormatterTelefoneOitoDigitos()
-                                          ]
-                                        : [
-                                            MaskUtils
-                                                .maskFormatterTelefoneNoveDigitos()
-                                          ],
+                                inputFormatters: [
+                                  FilteringTextInputFormatter.digitsOnly,
+                                  TelefoneInputFormatter()
+                                ],
                                 keyboardType: TextInputType.number,
                               )),
                           Padding(
@@ -184,11 +179,11 @@ class _CadastroOngView extends State<CadastroOngView> {
                                     border: OutlineInputBorder(
                                         borderRadius:
                                             BorderRadius.circular(20)),
-                                    labelText: 'E-mail'),
+                                    labelText: 'Usuário para login'),
                                 keyboardType: TextInputType.emailAddress,
                                 validator: (value) {
                                   if (value.toString().isEmpty) {
-                                    return 'Informe um E-mail!';
+                                    return 'Informe um Usuário!';
                                   }
                                   return null;
                                 },
@@ -398,15 +393,14 @@ class _CadastroOngView extends State<CadastroOngView> {
                                     padding: const EdgeInsets.fromLTRB(
                                         15, 12, 15, 12),
                                     onPressed: () {
-                                      globalKey = GlobalKey();
                                       if (controller.cadastroKey.currentState!
                                           .validate()) {
+                                        Loader.show(context,
+                                            progressIndicator:
+                                                CircularProgressIndicator(
+                                                    color: DefaultTheme
+                                                        .getColor()));
                                         salvarDados();
-                                        Navigator.pop(context);
-                                        Navigator.of(context).push(
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    const InicioView()));
                                       }
                                     },
                                     child: const Text("Registrar",
@@ -434,10 +428,7 @@ class _CadastroOngView extends State<CadastroOngView> {
         var lat = json.results?[0].geometry?.location?.lat;
         var lng = json.results?[0].geometry?.location?.lng;
 
-        controller.registrar(lat, lng, fotos);
-
-        retorno = "Instituição cadastrada com sucesso!";
-        ToastGenerico.mostrarMensagemSucesso(retorno);
+        controller.registrar(lat, lng, fotos, context);
       } else {
         retorno = "Endereço inválido.";
         ToastGenerico.mostrarMensagemErro(retorno);
@@ -539,7 +530,4 @@ class _CadastroOngView extends State<CadastroOngView> {
       mostraSenha = !mostraSenha;
     });
   }
-
-  @override
-  bool get wantKeepAlive => true;
 }

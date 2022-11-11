@@ -1,6 +1,6 @@
 // ignore: file_names
-import 'package:doeplus/styles/tema/defaultTheme.dart';
-import 'package:doeplus/telas/telaBusca.dart';
+import 'package:doeplus/styles/tema/default_theme.dart';
+import 'package:doeplus/telas/tela_busca.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';

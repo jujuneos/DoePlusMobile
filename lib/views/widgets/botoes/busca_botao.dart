@@ -1,16 +1,17 @@
-// ignore: file_names
-import 'package:doeplus/telas/telaBusca.dart';
+import 'package:doeplus/styles/tema/default_theme.dart';
+import 'package:doeplus/telas/tela_busca.dart';
 import 'package:flutter/material.dart';
-import 'package:doeplus/views/loginView.dart';
 
-class EntraBotao extends StatefulWidget {
-  const EntraBotao({Key? key}) : super(key: key);
+// ignore: must_be_immutable
+class BuscaBotao extends StatefulWidget {
+  // ignore: prefer_typing_uninitialized_variables
+  const BuscaBotao({Key? key}) : super(key: key);
 
   @override
-  State<EntraBotao> createState() => _EntraBotaoState();
+  State<BuscaBotao> createState() => _BuscaBotaoState();
 }
 
-class _EntraBotaoState extends State<EntraBotao> {
+class _BuscaBotaoState extends State<BuscaBotao> {
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -18,20 +19,20 @@ class _EntraBotaoState extends State<EntraBotao> {
         child: Material(
           elevation: 5.0,
           borderRadius: BorderRadius.circular(20),
-          color: const Color.fromRGBO(244, 244, 244, 10),
+          color: DefaultTheme.getColor(),
           child: MaterialButton(
             minWidth: MediaQuery.of(context).size.width,
             padding: const EdgeInsets.fromLTRB(15, 12, 15, 12),
             onPressed: () {
               globalKey = GlobalKey();
-              Navigator.of(context)
-                  .push(MaterialPageRoute(builder: (context) => LoginView()));
+              Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => const TelaBusca()));
             },
-            child: const Text("Entrar",
+            child: const Text("Buscar ONGs",
                 textAlign: TextAlign.center,
                 style: TextStyle(
                     fontFamily: 'HammersmithOne',
-                    color: Color.fromRGBO(204, 14, 221, 10),
+                    color: Colors.white,
                     fontSize: 25)),
           ),
         ));

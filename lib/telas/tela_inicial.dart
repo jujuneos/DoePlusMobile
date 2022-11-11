@@ -1,6 +1,6 @@
 // ignore: file_names
-import 'package:doeplus/styles/tema/defaultTheme.dart';
-import 'package:doeplus/views/splashView.dart';
+import 'package:doeplus/styles/tema/default_theme.dart';
+import 'package:doeplus/views/splash_view.dart';
 import 'package:flutter/material.dart';
 
 class TelaInicial extends StatelessWidget {

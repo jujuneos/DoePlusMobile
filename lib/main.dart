@@ -1,7 +1,7 @@
 import 'dart:io';
 
-import 'package:doeplus/services/AutenticacaoService.dart';
-import 'package:doeplus/telas/telaInicial.dart';
+import 'package:doeplus/services/autenticacao_service.dart';
+import 'package:doeplus/telas/tela_inicial.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_config/flutter_config.dart';
 import 'package:get/get.dart';

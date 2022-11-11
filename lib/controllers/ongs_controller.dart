@@ -1,10 +1,12 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:doeplus/models/ongView.dart';
-import 'package:doeplus/models/usuarioLogin.dart';
-import 'package:doeplus/telas/telaBusca.dart';
-import 'package:doeplus/views/widgets/ongInfo.dart';
+import 'package:doeplus/models/ong_view.dart';
+import 'package:doeplus/telas/tela_busca.dart';
+import 'package:doeplus/utils/toast.dart';
+import 'package:doeplus/views/ongs_favoritas_view.dart';
+import 'package:doeplus/views/pagina_ong_view.dart';
+import 'package:doeplus/views/widgets/ong_info.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
@@ -20,21 +22,55 @@ class OngsController extends GetxController {
   late GoogleMapController _mapsController;
   late StreamSubscription<Position> positionStream;
   List<OngView> ongs = [];
-  var url = "https://doeplusapi.herokuapp.com/api/";
+  List<OngView> ongsFavoritas = [];
+  var url = "https://doeplusapi.herokuapp.com/";
 
   get mapsController => _mapsController;
 
-  avaliarOng(OngView ong, double avaliacao, String token) async {
-    var urlAvaliacao = url + 'Instituicoes/Avaliar/${ong.id}';
+  avaliarOng(
+      OngView ong, double avaliacao, String token, BuildContext context) async {
+    var urlAvaliacao = url + 'api/Instituicoes/Avaliar/${ong.id}/$avaliacao';
 
-    var response = await http.post(Uri.parse(urlAvaliacao),
-        body: jsonEncode({"avaliacao": avaliacao}),
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": "Bearer $token"
-        });
+    var response = await http.post(Uri.parse(urlAvaliacao), headers: {
+      "Content-Type": "application/json",
+      "Authorization": "Bearer $token"
+    });
 
-    return response;
+    if (response.statusCode == 200) {
+      ToastGenerico.mostrarMensagemSucesso("Avaliação enviada com sucesso!");
+      var dadosOng = url + 'api/Instituicoes/Obter/${ong.id}';
+      var responseOng = await http.get(Uri.parse(dadosOng));
+      var dado = jsonDecode(responseOng.body);
+
+      var ongAtualizada = OngView(
+          id: dado['id'],
+          nome: dado['userName'],
+          tipo: dado['tipo'],
+          descricao: dado['descricao'],
+          foto: ong.foto,
+          fotos: ong.fotos,
+          endereco: dado['endereco'],
+          telefone: dado['phoneNumber'],
+          latitude: dado['latitude'],
+          longitude: dado['longitude'],
+          site: dado['site'] ?? "",
+          avaliacao: double.parse(dado['avaliacao'].toString()),
+          chavePix: dado['chavePix'] ?? "",
+          banco: dado['banco'] ?? "",
+          agencia: dado['agencia'] ?? "",
+          conta: dado['conta'] ?? "",
+          picPay: dado['picPay'] ?? "");
+      Loader.hide();
+      Navigator.pop(context);
+      Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+              builder: (context) =>
+                  PaginaOngView(ong: ongAtualizada).build(context)));
+    } else {
+      Loader.hide();
+      ToastGenerico.mostrarMensagemErro("Erro! Avaliação não enviada.");
+    }
   }
 
   favoritar(OngView ong, String token) async {
@@ -45,7 +81,59 @@ class OngsController extends GetxController {
       "Authorization": "Bearer $token"
     });
 
-    return response;
+    if (response.statusCode == 200) {
+      Loader.hide();
+      ToastGenerico.mostrarMensagemSucesso("ONG adicionada às suas favoritas.");
+    } else {
+      Loader.hide();
+      ToastGenerico.mostrarMensagemErro("ONG já favoritada.");
+    }
+  }
+
+  favoritas(String token, BuildContext context) async {
+    var urlFavoritas = url + 'Usuarios/favoritas';
+    var urlFoto = url + "api/Fotos/Foto/";
+    var urlFotos = url + "api/Fotos/Fotos/";
+
+    ongsFavoritas = [];
+
+    final response = await http.get(Uri.parse(urlFavoritas), headers: {
+      "Content-Type": "application/json",
+      "Authorization": "Bearer $token"
+    });
+
+    var dados = jsonDecode(response.body);
+
+    for (var dado in dados) {
+      final foto = await http.get(Uri.parse(urlFoto + dado['id']));
+      final responseFotos = await http.get(Uri.parse(urlFotos + dado['id']));
+
+      var dadosFoto = jsonDecode(foto.body);
+      var fotos = jsonDecode(responseFotos.body);
+
+      ongsFavoritas.add(OngView(
+          id: dado['id'],
+          nome: dado['userName'],
+          tipo: dado['tipo'],
+          descricao: dado['descricao'],
+          foto: dadosFoto['bytes'],
+          fotos: fotos,
+          endereco: dado['endereco'],
+          telefone: dado['phoneNumber'],
+          latitude: dado['latitude'],
+          longitude: dado['longitude'],
+          site: dado['site'] ?? "",
+          avaliacao: double.parse(dado['avaliacao'].toString()),
+          chavePix: dado['chavePix'] ?? "",
+          banco: dado['banco'] ?? "",
+          agencia: dado['agencia'] ?? "",
+          conta: dado['conta'] ?? "",
+          picPay: dado['picPay'] ?? ""));
+    }
+
+    Loader.hide();
+    Navigator.of(context).push(
+        MaterialPageRoute(builder: (context) => const OngsFavoritasView()));
   }
 
   filtrarOngs(String tipo) async {
@@ -75,6 +163,25 @@ class OngsController extends GetxController {
     update();
   }
 
+  removerFiltro() async {
+    markers.clear();
+
+    for (var ong in ongs) {
+      markers.add(
+        Marker(
+            markerId: MarkerId(ong.nome),
+            position: LatLng(ong.latitude, ong.longitude),
+            onTap: () => {
+                  showModalBottomSheet(
+                    context: globalKey.currentState!.context,
+                    builder: (context) => OngInfo(ong: ong).build(context),
+                  )
+                }),
+      );
+    }
+    update();
+  }
+
   onMapCreated(GoogleMapController gmc) async {
     _mapsController = gmc;
     getPosicao();
@@ -82,9 +189,11 @@ class OngsController extends GetxController {
   }
 
   loadOngs() async {
-    var urlGeral = url + "Instituicoes";
-    var urlFoto = url + "Fotos/Foto/";
-    var urlFotos = url + "Fotos/Fotos/";
+    var urlGeral = url + "api/Instituicoes";
+    var urlFoto = url + "api/Fotos/Foto/";
+    var urlFotos = url + "api/Fotos/Fotos/";
+
+    ongs = [];
 
     try {
       final response = await http.get(Uri.parse(urlGeral));
@@ -117,7 +226,6 @@ class OngsController extends GetxController {
             conta: dado['conta'] ?? "",
             picPay: dado['picPay'] ?? ""));
       }
-
       Loader.hide();
     } catch (error) {
       rethrow;
