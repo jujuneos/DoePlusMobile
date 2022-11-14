@@ -418,7 +418,7 @@ class _CadastroOngView extends State<CadastroOngView> {
 
     try {
       String url =
-          "https://maps.googleapis.com/maps/api/geocode/json?address=${controller.endereco.text}&key=chaveApi";
+          "https://maps.googleapis.com/maps/api/geocode/json?address=${controller.endereco.text}&key=AIzaSyDl3y4dN1jwbSi6FQE11vzvXZk_l5ERlKA";
 
       final response = await http.get(Uri.parse(url));
 
@@ -438,7 +438,7 @@ class _CadastroOngView extends State<CadastroOngView> {
       ToastGenerico.mostrarMensagemErro(retorno);
     }
 
-    controller.limparDados();
+    //controller.limparDados();
   }
 
   Future mostrarTipos() {

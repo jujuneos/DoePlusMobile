@@ -15,7 +15,6 @@ import 'package:get/get.dart';
 class AvaliacaoView extends StatelessWidget {
   OngView ong;
   AvaliacaoView({Key? key, required this.ong}) : super(key: key);
-  double avaliacao = 0.0;
   final controller = Get.put(OngsController());
   final loginController = Get.put(LoginController());
 
@@ -63,7 +62,7 @@ class AvaliacaoView extends StatelessWidget {
                 itemBuilder: (context, _) =>
                     const Icon(Icons.star, color: Colors.amber),
                 onRatingUpdate: (rating) {
-                  avaliacao = rating;
+                  controller.avaliacao = rating;
                 }),
             const Padding(
                 padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
@@ -77,6 +76,7 @@ class AvaliacaoView extends StatelessWidget {
             Padding(
                 padding: const EdgeInsets.fromLTRB(60, 15, 60, 15),
                 child: TextFormField(
+                  controller: controller.avalia,
                   style: FontDefaultStyles.sm(),
                   maxLines: 5,
                   decoration: InputDecoration(
@@ -100,7 +100,7 @@ class AvaliacaoView extends StatelessWidget {
                               progressIndicator: CircularProgressIndicator(
                                   color: DefaultTheme.getColor()));
                           controller.avaliarOng(
-                              ong, avaliacao, tokenGlobal!, context);
+                              ong, controller.avaliacao, tokenGlobal!, context);
                         } else {
                           ToastGenerico.mostrarMensagemErro(
                               "É necessário fazer o login.");

@@ -103,7 +103,7 @@ class PaginaOngView extends StatelessWidget {
                           child: Padding(
                             padding: const EdgeInsets.symmetric(
                                 horizontal: 0, vertical: 5),
-                            child: Text(ong.nome,
+                            child: Text(ong.nome!,
                                 style: const TextStyle(
                                     color: Color.fromRGBO(204, 14, 221, 10),
                                     fontFamily: 'HammersmithOne',
@@ -127,7 +127,11 @@ class PaginaOngView extends StatelessWidget {
                                   }
                                 },
                                 child: Row(children: <Widget>[
-                                  Text(ong.avaliacao.toStringAsPrecision(2),
+                                  Text(
+                                      ong.avaliacao != null
+                                          ? ong.avaliacao!
+                                              .toStringAsPrecision(2)
+                                          : "0.0",
                                       style: const TextStyle(
                                           color: Color.fromARGB(170, 0, 0, 0),
                                           fontFamily: 'HammersmithOne',
@@ -143,7 +147,7 @@ class PaginaOngView extends StatelessWidget {
                 child: Padding(
                     padding:
                         const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                    child: Text(ong.descricao,
+                    child: Text(ong.descricao!,
                         style: const TextStyle(
                             color: Color.fromARGB(90, 0, 0, 0),
                             fontFamily: 'HammersmithOne',
@@ -164,7 +168,7 @@ class PaginaOngView extends StatelessWidget {
                   height: 200,
                   child: ListView(
                       scrollDirection: Axis.horizontal,
-                      children: ong.fotos.map((foto) {
+                      children: ong.fotos!.map((foto) {
                         return Container(
                             child: Image.memory(base64Decode(foto['bytes']),
                                 height: 200, width: 200, fit: BoxFit.cover),
@@ -209,7 +213,7 @@ class PaginaOngView extends StatelessWidget {
                           Clipboard.setData(ClipboardData(text: ong.telefone));
                           ToastGenerico.mostrarMensagemSucesso("Copiado!");
                         }))),
-            if (ong.site!.isNotEmpty)
+            if (ong.site != null && ong.site!.isNotEmpty)
               Align(
                 alignment: Alignment.topLeft,
                 child: Padding(
@@ -251,7 +255,7 @@ class PaginaOngView extends StatelessWidget {
                             color: Color.fromARGB(90, 0, 0, 0),
                             fontFamily: 'HammersmithOne',
                             fontSize: 16)))),
-            if (ong.chavePix!.isNotEmpty)
+            if (ong.chavePix != null && ong.chavePix!.isNotEmpty)
               Align(
                   alignment: Alignment.topLeft,
                   child: Padding(
@@ -270,7 +274,7 @@ class PaginaOngView extends StatelessWidget {
                               ToastGenerico.mostrarMensagemSucesso("Copiado!");
                             }
                           }))),
-            if (ong.banco!.isNotEmpty)
+            if (ong.banco != null && ong.banco!.isNotEmpty)
               Align(
                   alignment: Alignment.topLeft,
                   child: Padding(
@@ -288,7 +292,7 @@ class PaginaOngView extends StatelessWidget {
                               ToastGenerico.mostrarMensagemSucesso("Copiado!");
                             }
                           }))),
-            if (ong.agencia!.isNotEmpty)
+            if (ong.agencia != null && ong.agencia!.isNotEmpty)
               Align(
                   alignment: Alignment.topLeft,
                   child: Padding(
@@ -307,7 +311,7 @@ class PaginaOngView extends StatelessWidget {
                               ToastGenerico.mostrarMensagemSucesso("Copiado!");
                             }
                           }))),
-            if (ong.conta!.isNotEmpty)
+            if (ong.conta != null && ong.conta!.isNotEmpty)
               Align(
                   alignment: Alignment.topLeft,
                   child: Padding(
@@ -325,7 +329,7 @@ class PaginaOngView extends StatelessWidget {
                               ToastGenerico.mostrarMensagemSucesso("Copiado!");
                             }
                           }))),
-            if (ong.picPay!.isNotEmpty)
+            if (ong.picPay != null && ong.picPay!.isNotEmpty)
               Align(
                   alignment: Alignment.topLeft,
                   child: Padding(

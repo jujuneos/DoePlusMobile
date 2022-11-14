@@ -24,12 +24,17 @@ class OngsController extends GetxController {
   List<OngView> ongs = [];
   List<OngView> ongsFavoritas = [];
   var url = "https://doeplusapi.herokuapp.com/";
+  late BuildContext context;
+  late double avaliacao;
+  final avalia = TextEditingController();
 
   get mapsController => _mapsController;
 
   avaliarOng(
       OngView ong, double avaliacao, String token, BuildContext context) async {
     var urlAvaliacao = url + 'api/Instituicoes/Avaliar/${ong.id}/$avaliacao';
+
+    print(avaliacao);
 
     var response = await http.post(Uri.parse(urlAvaliacao), headers: {
       "Content-Type": "application/json",
@@ -92,8 +97,6 @@ class OngsController extends GetxController {
 
   favoritas(String token, BuildContext context) async {
     var urlFavoritas = url + 'Usuarios/favoritas';
-    var urlFoto = url + "api/Fotos/Foto/";
-    var urlFotos = url + "api/Fotos/Fotos/";
 
     ongsFavoritas = [];
 
@@ -105,30 +108,7 @@ class OngsController extends GetxController {
     var dados = jsonDecode(response.body);
 
     for (var dado in dados) {
-      final foto = await http.get(Uri.parse(urlFoto + dado['id']));
-      final responseFotos = await http.get(Uri.parse(urlFotos + dado['id']));
-
-      var dadosFoto = jsonDecode(foto.body);
-      var fotos = jsonDecode(responseFotos.body);
-
-      ongsFavoritas.add(OngView(
-          id: dado['id'],
-          nome: dado['userName'],
-          tipo: dado['tipo'],
-          descricao: dado['descricao'],
-          foto: dadosFoto['bytes'],
-          fotos: fotos,
-          endereco: dado['endereco'],
-          telefone: dado['phoneNumber'],
-          latitude: dado['latitude'],
-          longitude: dado['longitude'],
-          site: dado['site'] ?? "",
-          avaliacao: double.parse(dado['avaliacao'].toString()),
-          chavePix: dado['chavePix'] ?? "",
-          banco: dado['banco'] ?? "",
-          agencia: dado['agencia'] ?? "",
-          conta: dado['conta'] ?? "",
-          picPay: dado['picPay'] ?? ""));
+      ongsFavoritas.add(OngView(id: dado["id"], nome: dado["nome"]));
     }
 
     Loader.hide();
@@ -150,8 +130,8 @@ class OngsController extends GetxController {
     for (var ong in ongsFiltro) {
       markers.add(
         Marker(
-            markerId: MarkerId(ong.nome),
-            position: LatLng(ong.latitude, ong.longitude),
+            markerId: MarkerId(ong.nome!),
+            position: LatLng(ong.latitude!, ong.longitude!),
             onTap: () => {
                   showModalBottomSheet(
                     context: globalKey.currentState!.context,
@@ -169,8 +149,8 @@ class OngsController extends GetxController {
     for (var ong in ongs) {
       markers.add(
         Marker(
-            markerId: MarkerId(ong.nome),
-            position: LatLng(ong.latitude, ong.longitude),
+            markerId: MarkerId(ong.nome!),
+            position: LatLng(ong.latitude!, ong.longitude!),
             onTap: () => {
                   showModalBottomSheet(
                     context: globalKey.currentState!.context,
@@ -189,46 +169,32 @@ class OngsController extends GetxController {
   }
 
   loadOngs() async {
-    var urlGeral = url + "api/Instituicoes";
+    var urlGeral = url + "api/Instituicoes/marcadores";
     var urlFoto = url + "api/Fotos/Foto/";
-    var urlFotos = url + "api/Fotos/Fotos/";
 
     ongs = [];
+    final response = await http.get(Uri.parse(urlGeral));
+    var dados = jsonDecode(response.body);
 
     try {
-      final response = await http.get(Uri.parse(urlGeral));
-
-      var dados = jsonDecode(response.body);
-
       for (var dado in dados) {
         final foto = await http.get(Uri.parse(urlFoto + dado['id']));
-        final responseFotos = await http.get(Uri.parse(urlFotos + dado['id']));
 
         var dadosFoto = jsonDecode(foto.body);
-        var fotos = jsonDecode(responseFotos.body);
 
         ongs.add(OngView(
             id: dado['id'],
             nome: dado['userName'],
-            tipo: dado['tipo'],
-            descricao: dado['descricao'],
             foto: dadosFoto['bytes'],
-            fotos: fotos,
-            endereco: dado['endereco'],
-            telefone: dado['phoneNumber'],
             latitude: dado['latitude'],
             longitude: dado['longitude'],
-            site: dado['site'] ?? "",
-            avaliacao: double.parse(dado['avaliacao'].toString()),
-            chavePix: dado['chavePix'] ?? "",
-            banco: dado['banco'] ?? "",
-            agencia: dado['agencia'] ?? "",
-            conta: dado['conta'] ?? "",
-            picPay: dado['picPay'] ?? ""));
+            endereco: dado['endereco'],
+            tipo: dado['tipo']));
       }
       Loader.hide();
     } catch (error) {
-      rethrow;
+      Loader.hide();
+      ToastGenerico.mostrarMensagemErro("Erro! Tente novamente.");
     }
 
     markers.clear();
@@ -236,17 +202,49 @@ class OngsController extends GetxController {
     for (var ong in ongs) {
       markers.add(
         Marker(
-            markerId: MarkerId(ong.nome),
-            position: LatLng(ong.latitude, ong.longitude),
+            markerId: MarkerId(ong.nome!),
+            position: LatLng(ong.latitude!, ong.longitude!),
             onTap: () => {
                   showModalBottomSheet(
-                    context: globalKey.currentState!.context,
-                    builder: (context) => OngInfo(ong: ong).build(context),
-                  )
+                      context: globalKey.currentState!.context,
+                      builder: (context) => OngInfo(ong: ong).build(context))
                 }),
       );
     }
     update();
+  }
+
+  loadDados(OngView ong, BuildContext context) async {
+    var urlDados = url + "api/Instituicoes/dados/";
+    var urlFinal = urlDados + ong.id!;
+    var urlFotos = url + "api/Fotos/Fotos/";
+
+    final response = await http.get(Uri.parse(urlFinal));
+
+    try {
+      final responseFotos = await http.get(Uri.parse(urlFotos + ong.id!));
+      var fotos = jsonDecode(responseFotos.body);
+
+      var dados = jsonDecode(response.body);
+      ong.tipo = dados['tipo'];
+      ong.descricao = dados['descricao'];
+      ong.fotos = fotos;
+      ong.telefone = dados['phoneNumber'];
+      ong.site = dados['site'] ?? "";
+      ong.avaliacao = double.parse(dados['avaliacao'].toString());
+      ong.chavePix = dados['chavePix'] ?? "";
+      ong.banco = dados['banco'] ?? "";
+      ong.agencia = dados['agencia'] ?? "";
+      ong.conta = dados['conta'] ?? "";
+      ong.chavePix = dados['chavePix'] ?? "";
+
+      Loader.hide();
+      Navigator.of(context).push(
+          MaterialPageRoute(builder: (context) => PaginaOngView(ong: ong)));
+    } catch (e) {
+      Loader.hide();
+      ToastGenerico.mostrarMensagemErro("Erro! Tente novamente mais tarde");
+    }
   }
 
   watchPosicao() async {

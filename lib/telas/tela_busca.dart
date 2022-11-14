@@ -16,6 +16,7 @@ class TelaBusca extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = Get.put(OngsController());
+    controller.context = context;
 
     if (controller.ongs.isEmpty) {
       Loader.show(context,

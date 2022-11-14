@@ -3,6 +3,7 @@ import 'package:doeplus/styles/tema/default_theme.dart';
 import 'package:doeplus/views/inicio_view_logado.dart';
 import 'package:doeplus/views/pagina_ong_view.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_overlay_loader/flutter_overlay_loader.dart';
 import 'package:get/get.dart';
 
 class OngsFavoritasView extends StatefulWidget {
@@ -62,15 +63,13 @@ class _OngsFavoritasView extends State<OngsFavoritasView> {
                               padding:
                                   const EdgeInsets.fromLTRB(15, 12, 15, 12),
                               onPressed: () {
-                                ongKey = GlobalKey();
-                                Navigator.pop(context);
-                                Navigator.pushReplacement(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            PaginaOngView(ong: ong)));
+                                Loader.show(context,
+                                    progressIndicator:
+                                        CircularProgressIndicator(
+                                            color: DefaultTheme.getColor()));
+                                controller.loadDados(ong, context);
                               },
-                              child: Text(ong.nome,
+                              child: Text(ong.nome!,
                                   textAlign: TextAlign.left,
                                   style: TextStyle(
                                       fontFamily: 'HammersmithOne',

@@ -34,7 +34,7 @@ class AutenticacaoService {
     request.fields['longitude'] = ong.longitude.toString();
     request.fields['avaliacao'] = ong.avaliacao.toString();
     request.fields['avaliacaoTotal'] = ong.avaliacaoTotal.toString();
-    request.fields['qtdAvaliacao'] = ong.qtdAvaliacao.toString();
+    request.fields['qtdAvaliacoes'] = ong.qtdAvaliacao.toString();
     request.fields['chavePix'] = ong.chavePix!;
     request.fields['banco'] = ong.banco!;
     request.fields['agencia'] = ong.agencia!;
@@ -57,6 +57,7 @@ class AutenticacaoService {
       Navigator.of(context)
           .push(MaterialPageRoute(builder: (context) => const InicioView()));
     } else {
+      Loader.hide();
       ToastGenerico.mostrarMensagemErro("Erro interno! ONG não cadastrada.");
     }
   }
@@ -76,6 +77,7 @@ class AutenticacaoService {
       ToastGenerico.mostrarMensagemSucesso("Usuário cadastrado com sucesso!");
     } else {
       Loader.hide();
+      print(response.body);
       ToastGenerico.mostrarMensagemErro("Erro! Usuário não cadastrado.");
     }
   }
